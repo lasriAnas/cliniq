@@ -160,7 +160,31 @@ Open **Reports**.
 
 ---
 
-## 12. Settings (all roles)
+## 12. Patient Portal (separate experience)
+
+The portal lives at `/portal/` — a completely separate app within the same codebase, designed for patients rather than staff.
+
+### Registering as a patient
+
+1. Go to **`/portal/register`**.
+2. Enter your name and date of birth exactly as given at the clinic (e.g. use one of the seeded patients).
+3. If a match is found, you're prompted to choose an email and password for your portal account.
+4. After submitting, you're signed in and redirected to `/portal`.
+
+### What the portal shows
+
+- **Home** — upcoming appointments, unpaid invoice count, recent prescriptions.
+- **Appointments** (`/portal/appointments`) — full history sorted by date; a **Book a new appointment** form at the top lets you pick a doctor and date/time. When booked, the doctor receives a real-time notification in the staff dashboard.
+- **Prescriptions** (`/portal/prescriptions`) — all prescriptions with medication name, dosage, duration, and notes.
+- **Invoices** (`/portal/invoices`) — billing history with amounts in MAD and payment status; an alert banner appears when there is an outstanding balance.
+
+### Auth isolation
+
+Patients can **only** access `/portal/*` routes. If a patient navigates to `/dashboard`, they are redirected to `/login` (no staff profile exists for them). If a staff member navigates to `/portal`, they are redirected to `/portal/login` (no patient record is linked to their auth user).
+
+---
+
+## 13. Settings (all roles)
 
 Click your **name** at the bottom of the sidebar (the panel showing your name, role, and a ⚙ icon) → opens **Settings**.
 

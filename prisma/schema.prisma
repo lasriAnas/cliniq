@@ -59,6 +59,7 @@ model Patient {
   phone        String
   address      String?
   createdAt    DateTime      @default(now())
+  userId       String?       @unique
   appointments Appointment[]
 }
 
