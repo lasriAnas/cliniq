@@ -91,7 +91,14 @@ Log in as **admin** or **receptionist** → open **Billing**.
 
 - Click **New invoice** → pick an un-invoiced appointment → enter amount in MAD → submit.
 - Change invoice status inline (UNPAID → PAID → CANCELLED).
+  - **PAID** can only be set when the linked appointment is already **COMPLETED** — the dropdown will reject it otherwise.
+  - Marking an invoice PAID sets a `paidAt` timestamp automatically.
 - Filter by status or doctor; sort by date.
+
+### Receipt
+
+- Click **View receipt** on any invoice row to open a formatted receipt dialog showing patient, doctor, appointment date, and amount in MAD.
+- Click **Print** inside the receipt dialog (or use Ctrl+P) — the sidebar and header are hidden automatically so only the receipt content prints.
 
 ---
 

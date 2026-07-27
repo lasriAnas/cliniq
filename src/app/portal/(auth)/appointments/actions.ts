@@ -5,21 +5,22 @@ import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 import { requirePatient } from "@/lib/portal-auth";
 import { createNotification } from "@/app/dashboard/notifications/actions";
+import { portalBookingSchema } from "@/lib/schemas/portal-booking";
 
 export async function portalBookAppointment(formData: FormData) {
   const patient = await requirePatient();
 
-  const doctorId = formData.get("doctorId") as string;
-  const scheduledAt = formData.get("scheduledAt") as string;
+  const parsed = portalBookingSchema.safeParse({
+    doctorId: formData.get("doctorId"),
+    scheduledAt: formData.get("scheduledAt"),
+  });
 
-  if (!doctorId || !scheduledAt) {
-    throw new Error("Doctor and appointment time are required.");
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message ?? "Invalid booking data.");
   }
 
+  const { doctorId, scheduledAt } = parsed.data;
   const scheduledDate = new Date(scheduledAt);
-  if (isNaN(scheduledDate.getTime()) || scheduledDate < new Date()) {
-    throw new Error("Please pick a future date and time.");
-  }
 
   const appointment = await withRetry(() =>
     prisma.appointment.create({
