@@ -62,6 +62,14 @@ Stay logged in as **admin** → open **Appointments**.
 - Use the Doctor and Date filters to narrow the list.
 - Change an appointment's status inline via the status dropdown (SCHEDULED → COMPLETED, etc.).
 
+### Calendar view
+
+- Click the **Calendar** toggle (top-left of the appointments area) to switch from the table to a monthly grid.
+- Each day cell shows color-coded chips: blue = Scheduled, green = Completed, grey = Cancelled. Today's date is highlighted in green.
+- Click any day with appointments to open a detail panel — from there you can change status, edit notes, or open the diagnosis dialog without leaving the calendar.
+- Use the **‹ / ›** arrows to move between months, or click **Today** to jump back to the current month.
+- The **Doctor** filter works the same as in table view — it narrows which appointments appear in the grid.
+
 ### Notes (doctor only)
 
 - Log in as **doctor1** → open **Appointments**.
@@ -154,7 +162,7 @@ Open **Reports**.
 
 ## 12. Settings (all roles)
 
-Click your **name** in the top-right header → **Settings**.
+Click your **name** at the bottom of the sidebar (the panel showing your name, role, and a ⚙ icon) → opens **Settings**.
 
 - Update your display name and email address.
 - Change your password (current password required; new password confirmed twice).

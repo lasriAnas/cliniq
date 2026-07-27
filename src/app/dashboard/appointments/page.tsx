@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 import { getCurrentProfile } from "@/lib/auth";
-import { AppointmentsTable, type AppointmentRow } from "@/components/appointments/appointments-table";
+import { AppointmentsView, type AppointmentRow } from "@/components/appointments/appointments-view";
 import { AppointmentCreateDialog } from "@/components/appointments/appointment-create-dialog";
 
 export default async function AppointmentsPage() {
@@ -46,7 +46,7 @@ export default async function AppointmentsPage() {
         <h1 className="text-2xl font-semibold">Appointments</h1>
         {canCreate && <AppointmentCreateDialog patients={patients} doctors={doctors} />}
       </div>
-      <AppointmentsTable
+      <AppointmentsView
         data={rows}
         doctors={doctors}
         currentProfileId={profile?.id ?? ""}
