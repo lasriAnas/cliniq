@@ -169,21 +169,39 @@ Open **Reports**.
 
 ## 12. Patient Portal (separate experience)
 
-The portal lives at `/portal/` — a completely separate app within the same codebase, designed for patients rather than staff.
+The portal is the default landing page — visiting **`/`** redirects directly to `/portal`. It is a completely separate app within the same codebase, designed for patients rather than staff. Staff access their dashboard at `/login`.
 
-### Registering as a patient
+### Step 1 — Register a patient account
 
-1. Go to **`/portal/register`**.
-2. Enter your name and date of birth exactly as given at the clinic (e.g. use one of the seeded patients).
-3. If a match is found, you're prompted to choose an email and password for your portal account.
+Each seeded patient needs to self-register once before they can log in. Use any of these seeded patients:
+
+| Name | Date of birth |
+|---|---|
+| Mohammed Alaoui | 12/03/1978 |
+| Fatima Zahra Benali | 22/07/1985 |
+| Youssef Chraibi | 17/09/1955 |
+| Khadija Tazi | 30/01/1990 |
+| Loubna Kettani | 19/08/1988 |
+
+1. Go to **`/portal/register`** (or click **Register** on the portal login page).
+2. Enter the patient's **name** and **date of birth** exactly as shown above.
+3. If matched, you're prompted to choose an **email** and **password** for the portal account.
 4. After submitting, you're signed in and redirected to `/portal`.
+
+> The registration only works once per patient — a second attempt with the same name/DOB is rejected because the record is already linked.
+
+### Step 2 — Log in as a patient
+
+1. Go to **`/portal/login`** (or just visit `/` and click **Sign in**).
+2. Enter the email and password you chose during registration.
+3. You land on the patient home dashboard.
 
 ### What the portal shows
 
-- **Home** — upcoming appointments, unpaid invoice count, recent prescriptions.
-- **Appointments** (`/portal/appointments`) — full history sorted by date; a **Book a new appointment** form at the top lets you pick a doctor and date/time. When booked, the doctor receives a real-time notification in the staff dashboard.
+- **Home** — upcoming appointments, unpaid invoice count, recent prescriptions at a glance.
+- **Appointments** (`/portal/appointments`) — full history sorted by date; a **Book a new appointment** form at the top lets you pick a doctor and date/time. When booked, the assigned doctor receives a real-time notification in the staff dashboard.
 - **Prescriptions** (`/portal/prescriptions`) — all prescriptions with medication name, dosage, duration, and notes.
-- **Invoices** (`/portal/invoices`) — billing history with amounts in MAD and payment status; an alert banner appears when there is an outstanding balance.
+- **Invoices** (`/portal/invoices`) — billing history with amounts in MAD and payment status; an amber alert banner appears when there is an outstanding balance.
 
 ### Auth isolation
 
