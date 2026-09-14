@@ -1,6 +1,30 @@
 # CliniQ — Demo Script
 
-All accounts use the password: **`password123`**
+## Login Credentials
+
+### Staff (password: `password123` for all)
+
+| Role | Email | Name |
+|---|---|---|
+| Admin | admin@medrecrut.dev | Alice Benali |
+| Doctor 1 | doctor1@medrecrut.dev | Dr. Karim Idrissi |
+| Doctor 2 | doctor2@medrecrut.dev | Dr. Sara Tazi |
+| Doctor 3 | doctor3@medrecrut.dev | Dr. Youssef Amrani |
+| Doctor 4 | doctor4@medrecrut.dev | Dr. Nadia Berrada |
+| Receptionist 1 | reception@medrecrut.dev | Rachid Moussaoui |
+| Receptionist 2 | reception2@medrecrut.dev | Imane Chaoui |
+
+### Patient Portal — Seeded patients for registration
+
+Register at `/portal/register` with the name and date of birth below, then choose any email/password.
+
+| Name | Date of birth |
+|---|---|
+| Mohammed Alaoui | 12/03/1978 |
+| Fatima Zahra Benali | 22/07/1985 |
+| Youssef Chraibi | 17/09/1955 |
+| Khadija Tazi | 30/01/1990 |
+| Loubna Kettani | 19/08/1988 |
 
 ---
 
