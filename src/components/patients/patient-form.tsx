@@ -35,7 +35,7 @@ export function PatientForm({
   const form = useForm<PatientFormValues>({
     resolver: zodResolver(patientSchema),
     mode: "onChange",
-    defaultValues: { name: "", dob: "", gender: "MALE", phone: "", address: "" },
+    defaultValues: { name: "", dob: "", gender: "MALE", phone: "", address: "", email: "" },
   });
 
   function onSubmit(values: PatientFormValues) {
@@ -118,6 +118,19 @@ export function PatientForm({
                   {...field}
                   onChange={(e) => field.onChange(e.target.value.replace(/\D/g, "").slice(0, 10))}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email (for portal access)</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="patient@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -16,6 +16,7 @@ export async function createPatient(formData: FormData) {
     gender: formData.get("gender"),
     phone: formData.get("phone"),
     address: formData.get("address") || undefined,
+    email: formData.get("email") || undefined,
   });
 
   if (!parsed.success) {

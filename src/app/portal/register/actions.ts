@@ -3,13 +3,12 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { supabaseAdmin } from "@/lib/supabase/admin";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 
 export async function findPatientRecord(formData: FormData) {
   const name = (formData.get("name") as string).trim();
-  const dob = formData.get("dob") as string; // "YYYY-MM-DD"
+  const dob = formData.get("dob") as string;
 
   if (!name || !dob) {
     redirect(`/portal/register?error=${encodeURIComponent("Name and date of birth are required.")}`);
@@ -32,60 +31,104 @@ export async function findPatientRecord(formData: FormData) {
   if (!patient) {
     redirect(
       `/portal/register?error=${encodeURIComponent(
-        "No unregistered patient record found with that name and date of birth. Contact the clinic if you need help.",
+        "No unregistered patient record found. Contact the clinic if you need help.",
       )}`,
     );
   }
 
-  redirect(`/portal/register?patientId=${patient.id}&name=${encodeURIComponent(patient.name)}`);
-}
-
-export async function createPortalAccount(formData: FormData) {
-  const patientId = formData.get("patientId") as string;
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-
-  if (!patientId || !email || !password) {
-    redirect(`/portal/register?error=${encodeURIComponent("Missing required fields.")}`);
+  if (!patient.email) {
+    redirect(
+      `/portal/register?error=${encodeURIComponent(
+        "No email address on file for this record. Ask the clinic to add your email before registering.",
+      )}`,
+    );
   }
 
-  // Double-check the patient record is still unlinked
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithOtp({
+    email: patient.email,
+    options: { shouldCreateUser: true },
+  });
+
+  if (error) {
+    redirect(
+      `/portal/register?error=${encodeURIComponent("Failed to send verification code. Try again.")}`,
+    );
+  }
+
+  redirect(
+    `/portal/register?step=verify&email=${encodeURIComponent(patient.email)}&patientId=${patient.id}`,
+  );
+}
+
+export async function verifyOtpCode(formData: FormData) {
+  const email = formData.get("email") as string;
+  const token = (formData.get("token") as string).trim();
+  const patientId = formData.get("patientId") as string;
+
+  if (!email || !token || !patientId) {
+    redirect(`/portal/register?error=${encodeURIComponent("Missing fields.")}`);
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
+
+  if (error) {
+    redirect(
+      `/portal/register?step=verify&email=${encodeURIComponent(email)}&patientId=${patientId}&error=${encodeURIComponent(
+        "Invalid or expired code. Check your inbox or go back to resend.",
+      )}`,
+    );
+  }
+
+  redirect(
+    `/portal/register?step=password&email=${encodeURIComponent(email)}&patientId=${patientId}`,
+  );
+}
+
+export async function setPortalPassword(formData: FormData) {
+  const password = formData.get("password") as string;
+  const patientId = formData.get("patientId") as string;
+
+  if (!password || !patientId) {
+    redirect(`/portal/register?error=${encodeURIComponent("Missing fields.")}`);
+  }
+
+  const supabase = await createClient();
+
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData.user) {
+    redirect(`/portal/register?error=${encodeURIComponent("Session expired. Please start again.")}`);
+  }
+
+  // Guard: patient must still be unlinked
   const patient = await withRetry(() =>
     prisma.patient.findUnique({ where: { id: patientId } }),
   );
 
   if (!patient || patient.userId !== null) {
     redirect(
-      `/portal/register?error=${encodeURIComponent("This patient record is already registered. Please sign in.")}`,
-    );
-  }
-
-  // Create a Supabase auth user
-  const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-  });
-
-  if (authError || !authData.user) {
-    redirect(
-      `/portal/register?patientId=${patientId}&name=${encodeURIComponent(patient.name)}&error=${encodeURIComponent(
-        authError?.message ?? "Failed to create account.",
+      `/portal/register?error=${encodeURIComponent(
+        "This record is already registered. Please sign in.",
       )}`,
     );
   }
 
-  // Link the Supabase user to the Patient record
+  const { error: pwError } = await supabase.auth.updateUser({ password });
+  if (pwError) {
+    redirect(
+      `/portal/register?step=password&patientId=${patientId}&error=${encodeURIComponent(
+        pwError.message ?? "Failed to set password.",
+      )}`,
+    );
+  }
+
   await withRetry(() =>
     prisma.patient.update({
       where: { id: patientId },
-      data: { userId: authData.user.id },
+      data: { userId: userData.user.id },
     }),
   );
-
-  // Sign in immediately
-  const supabase = await createClient();
-  await supabase.auth.signInWithPassword({ email, password });
 
   revalidatePath("/", "layout");
   redirect("/portal");

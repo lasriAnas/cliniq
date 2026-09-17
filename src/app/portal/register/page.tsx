@@ -3,14 +3,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { findPatientRecord, createPortalAccount } from "./actions";
+import { findPatientRecord, verifyOtpCode, setPortalPassword } from "./actions";
 
 export default async function PortalRegisterPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; patientId?: string; name?: string }>;
+  searchParams: Promise<{ step?: string; error?: string; patientId?: string; email?: string }>;
 }) {
-  const { error, patientId, name } = await searchParams;
+  const { step, error, patientId, email } = await searchParams;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/30 p-4">
@@ -21,15 +21,20 @@ export default async function PortalRegisterPage({
           </div>
           <h1 className="text-xl font-semibold">Create a portal account</h1>
           <p className="text-sm text-muted-foreground">
-            We&apos;ll match your details to your clinic record.
+            {!step && "We'll match your details to your clinic record."}
+            {step === "verify" && `A 6-digit code was sent to ${email}.`}
+            {step === "password" && "One last step — choose a password."}
           </p>
         </div>
 
-        {!patientId ? (
+        {/* Step 1 — find record */}
+        {!step && (
           <Card>
             <CardHeader>
               <CardTitle>Find your record</CardTitle>
-              <CardDescription>Enter your name and date of birth exactly as given at the clinic.</CardDescription>
+              <CardDescription>
+                Enter your name and date of birth exactly as given at the clinic.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <form action={findPatientRecord} className="flex flex-col gap-4">
@@ -48,24 +53,70 @@ export default async function PortalRegisterPage({
               </form>
             </CardContent>
           </Card>
-        ) : (
+        )}
+
+        {/* Step 2 — verify OTP */}
+        {step === "verify" && email && patientId && (
           <Card>
             <CardHeader>
-              <CardTitle>Set up your account</CardTitle>
+              <CardTitle>Enter verification code</CardTitle>
               <CardDescription>
-                Record found for <strong>{name}</strong>. Choose an email and password for your portal login.
+                Check your inbox at <strong>{email}</strong> and enter the 6-digit code below.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form action={createPortalAccount} className="flex flex-col gap-4">
+              <form action={verifyOtpCode} className="flex flex-col gap-4">
+                <input type="hidden" name="email" value={email} />
                 <input type="hidden" name="patientId" value={patientId} />
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" required autoComplete="email" />
+                  <Label htmlFor="token">Verification code</Label>
+                  <Input
+                    id="token"
+                    name="token"
+                    inputMode="numeric"
+                    maxLength={6}
+                    placeholder="123456"
+                    autoComplete="one-time-code"
+                    required
+                  />
                 </div>
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                <Button type="submit" className="w-full">
+                  Verify code
+                </Button>
+              </form>
+              <p className="mt-3 text-center text-xs text-muted-foreground">
+                Wrong email?{" "}
+                <Link href="/portal/register" className="underline hover:text-foreground">
+                  Start over
+                </Link>
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Step 3 — set password */}
+        {step === "password" && patientId && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Choose a password</CardTitle>
+              <CardDescription>
+                Your email is verified. Set a password to complete your account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form action={setPortalPassword} className="flex flex-col gap-4">
+                <input type="hidden" name="patientId" value={patientId} />
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="password">Password</Label>
-                  <Input id="password" name="password" type="password" required minLength={8} autoComplete="new-password" />
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
+                  />
                 </div>
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 <Button type="submit" className="w-full">

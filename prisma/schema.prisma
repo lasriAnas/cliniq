@@ -58,6 +58,7 @@ model Patient {
   gender       Gender
   phone        String
   address      String?
+  email        String?
   createdAt    DateTime      @default(now())
   userId       String?       @unique
   appointments Appointment[]
