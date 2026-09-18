@@ -43,7 +43,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen">
       {/* Sidebar — desktop only */}
-      <aside className="hidden md:flex w-60 flex-col bg-sidebar text-sidebar-foreground print:hidden shrink-0">
+      <aside className="hidden md:flex w-60 flex-col bg-sidebar text-sidebar-foreground print:hidden shrink-0 sticky top-0 h-screen">
         <Link
           href="/dashboard"
           className="flex items-center gap-3 px-5 h-14 border-b border-sidebar-border hover:opacity-90 transition-opacity shrink-0"
