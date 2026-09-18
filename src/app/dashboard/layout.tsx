@@ -4,6 +4,7 @@ import { getCurrentProfile } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DashboardNav } from "@/components/dashboard-nav";
+import { MobileSidebar } from "@/components/mobile-sidebar";
 import { ChatWidget } from "@/components/messages/chat-widget";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -41,9 +42,8 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-60 flex flex-col bg-sidebar text-sidebar-foreground print:hidden shrink-0">
-        {/* Logo */}
+      {/* Sidebar — desktop only */}
+      <aside className="hidden md:flex w-60 flex-col bg-sidebar text-sidebar-foreground print:hidden shrink-0">
         <Link
           href="/dashboard"
           className="flex items-center gap-3 px-5 h-14 border-b border-sidebar-border hover:opacity-90 transition-opacity shrink-0"
@@ -53,13 +53,9 @@ export default async function DashboardLayout({
           </div>
           <span className="font-semibold text-sidebar-foreground tracking-tight">CliniQ</span>
         </Link>
-
-        {/* Nav */}
         <div className="flex-1 overflow-y-auto px-3 py-4">
           <DashboardNav items={visibleNavItems} />
         </div>
-
-        {/* Bottom: user */}
         <div className="border-t border-sidebar-border px-3 py-3 shrink-0">
           <Link
             href="/dashboard/settings"
@@ -89,11 +85,28 @@ export default async function DashboardLayout({
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="flex items-center justify-end border-b px-6 py-3 print:hidden gap-1">
-          <NotificationBell profileId={profile.id} />
-          <ThemeToggle />
+        <header className="flex items-center gap-2 border-b px-4 py-3 print:hidden">
+          {/* Mobile: hamburger + brand — hidden on desktop */}
+          <MobileSidebar
+            items={visibleNavItems}
+            profileName={profile.name}
+            profileRole={profile.role}
+            profileInitial={profile.name.charAt(0).toUpperCase()}
+            signOutAction={signOut}
+          />
+          <Link href="/dashboard" className="flex items-center gap-2 md:hidden mr-auto">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500">
+              <span className="text-white font-bold text-xs leading-none">C</span>
+            </div>
+            <span className="font-semibold text-sm">CliniQ</span>
+          </Link>
+          {/* Push icons to the right on desktop */}
+          <div className="flex items-center gap-1 ml-auto">
+            <NotificationBell profileId={profile.id} />
+            <ThemeToggle />
+          </div>
         </header>
-        <main className="flex-1 p-6 print:p-0">{children}</main>
+        <main className="flex-1 p-4 md:p-6 print:p-0">{children}</main>
       </div>
       <ChatWidget currentProfileId={profile.id} />
     </div>

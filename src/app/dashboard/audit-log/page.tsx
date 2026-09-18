@@ -63,7 +63,7 @@ export default async function AuditLogPage({
 
       <AuditLogFilters />
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>

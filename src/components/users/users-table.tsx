@@ -50,7 +50,7 @@ function DeactivateButton({ id, active }: { id: string; active: boolean }) {
 
 export function UsersTable({ data, currentUserId }: { data: UserRow[]; currentUserId: string }) {
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
