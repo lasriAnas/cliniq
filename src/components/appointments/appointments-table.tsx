@@ -85,23 +85,23 @@ export function AppointmentsTable({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-end gap-3">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
           <label className="text-sm text-muted-foreground">Doctor</label>
           <OptionCombobox
             options={doctorOptions}
             value={doctorId}
             onChange={(value) => { setDoctorId(value || ALL_DOCTORS); resetPage(); }}
             placeholder="Search for a doctor..."
-            className="w-48"
+            className="w-full sm:w-48"
           />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
           <label className="text-sm text-muted-foreground">Date</label>
           <Input
             type="date"
             value={date}
             onChange={(e) => { setDate(e.target.value); resetPage(); }}
-            className="w-44"
+            className="w-full sm:w-44"
           />
         </div>
         {(doctorId !== ALL_DOCTORS || date) && (

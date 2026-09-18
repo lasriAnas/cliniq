@@ -10,7 +10,7 @@ export default function PatientDetailLoading() {
         <Skeleton className="h-5 w-16 rounded-full" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader><Skeleton className="h-5 w-32" /></CardHeader>
           <CardContent className="flex flex-col gap-3">

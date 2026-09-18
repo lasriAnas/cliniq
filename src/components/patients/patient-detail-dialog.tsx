@@ -84,7 +84,7 @@ export function PatientDetailDialog({
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 sm:gap-4">
               <div>
                 <div className="text-muted-foreground">Date of birth</div>
                 <div>{detail.dob}</div>

@@ -136,8 +136,9 @@ export function AppointmentsCalendar({
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="rounded-lg border overflow-hidden">
+      {/* Grid — horizontally scrollable on mobile */}
+      <div className="overflow-x-auto">
+      <div className="rounded-lg border overflow-hidden min-w-[560px]">
         {/* Weekday headers */}
         <div className="grid grid-cols-7 border-b bg-muted/50">
           {WEEK_DAYS.map((d) => (
@@ -218,6 +219,7 @@ export function AppointmentsCalendar({
             );
           })}
         </div>
+      </div>
       </div>
 
       {/* Legend */}

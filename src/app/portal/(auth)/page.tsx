@@ -53,7 +53,7 @@ export default async function PortalHomePage() {
       </div>
 
       {/* Quick stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
         <Card>
           <CardContent className="flex items-center gap-3 pt-4 pb-4">
             <CalendarDays className="h-8 w-8 text-emerald-600 shrink-0" />

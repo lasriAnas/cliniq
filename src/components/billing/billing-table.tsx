@@ -92,16 +92,16 @@ export function BillingTable({ data }: { data: InvoiceRow[] }) {
           placeholder="Search patient..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-44"
+          className="w-full sm:w-44"
         />
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
           <label className="text-sm text-muted-foreground">Status</label>
           <Select
             items={{ [ALL]: "All statuses", UNPAID: "UNPAID", PAID: "PAID", CANCELLED: "CANCELLED" }}
             value={status}
             onValueChange={(value) => setStatus(value ?? ALL)}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-full sm:w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -112,14 +112,14 @@ export function BillingTable({ data }: { data: InvoiceRow[] }) {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
           <label className="text-sm text-muted-foreground">Doctor</label>
           <Select
             items={{ [ALL]: "All doctors", ...Object.fromEntries(doctorNames.map((n) => [n, `Dr. ${n}`])) }}
             value={doctor}
             onValueChange={(value) => setDoctor(value ?? ALL)}
           >
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
