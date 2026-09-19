@@ -26,7 +26,7 @@ export default async function LoginPage({
             <span className="text-lg font-bold text-white">C</span>
           </div>
           <CardTitle>Sign in to CliniQ</CardTitle>
-          <CardDescription>Staff and patients use the same login.</CardDescription>
+          <CardDescription>Enter your email and password to continue.</CardDescription>
         </CardHeader>
         <CardContent>
           <form action={login} className="flex flex-col gap-4">
@@ -55,9 +55,9 @@ export default async function LoginPage({
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Patient without an account?{" "}
-            <Link href="/portal/register" className="underline hover:text-foreground">
-              Register
+            New patient?{" "}
+            <Link href="/register" className="underline hover:text-foreground">
+              Create an account
             </Link>
           </p>
         </CardContent>
