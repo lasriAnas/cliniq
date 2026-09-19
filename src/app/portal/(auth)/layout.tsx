@@ -15,7 +15,7 @@ export default async function PortalLayout({ children }: { children: React.React
   const patient = await getCurrentPatient();
 
   if (!patient) {
-    redirect("/portal/login");
+    redirect("/login");
   }
 
   return (

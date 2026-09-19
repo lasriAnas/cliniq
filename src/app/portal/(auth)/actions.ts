@@ -6,5 +6,5 @@ import { createClient } from "@/lib/supabase/server";
 export async function portalSignOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/portal/login");
+  redirect("/login");
 }

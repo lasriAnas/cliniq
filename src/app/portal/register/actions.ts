@@ -2,9 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function findPatientRecord(formData: FormData) {
   const name = (formData.get("name") as string).trim();
@@ -36,69 +36,20 @@ export async function findPatientRecord(formData: FormData) {
     );
   }
 
-  if (!patient.email) {
-    redirect(
-      `/portal/register?error=${encodeURIComponent(
-        "No email address on file for this record. Ask the clinic to add your email before registering.",
-      )}`,
-    );
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithOtp({
-    email: patient.email,
-    options: { shouldCreateUser: true },
-  });
-
-  if (error) {
-    redirect(
-      `/portal/register?error=${encodeURIComponent("Failed to send verification code. Try again.")}`,
-    );
-  }
-
   redirect(
-    `/portal/register?step=verify&email=${encodeURIComponent(patient.email)}&patientId=${patient.id}`,
+    `/portal/register?step=email&patientId=${patient.id}&name=${encodeURIComponent(patient.name)}`,
   );
 }
 
-export async function verifyOtpCode(formData: FormData) {
-  const email = formData.get("email") as string;
-  const token = (formData.get("token") as string).trim();
-  const patientId = formData.get("patientId") as string;
-
-  if (!email || !token || !patientId) {
-    redirect(`/portal/register?error=${encodeURIComponent("Missing fields.")}`);
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
-
-  if (error) {
-    redirect(
-      `/portal/register?step=verify&email=${encodeURIComponent(email)}&patientId=${patientId}&error=${encodeURIComponent(
-        "Invalid or expired code. Check your inbox or go back to resend.",
-      )}`,
-    );
-  }
-
-  redirect(
-    `/portal/register?step=password&email=${encodeURIComponent(email)}&patientId=${patientId}`,
-  );
-}
-
-export async function setPortalPassword(formData: FormData) {
+export async function createPortalAccount(formData: FormData) {
+  const email = (formData.get("email") as string).trim();
   const password = formData.get("password") as string;
   const patientId = formData.get("patientId") as string;
 
-  if (!password || !patientId) {
-    redirect(`/portal/register?error=${encodeURIComponent("Missing fields.")}`);
-  }
-
-  const supabase = await createClient();
-
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData.user) {
-    redirect(`/portal/register?error=${encodeURIComponent("Session expired. Please start again.")}`);
+  if (!email || !password || !patientId) {
+    redirect(
+      `/portal/register?step=email&patientId=${patientId}&error=${encodeURIComponent("All fields are required.")}`,
+    );
   }
 
   // Guard: patient must still be unlinked
@@ -114,11 +65,16 @@ export async function setPortalPassword(formData: FormData) {
     );
   }
 
-  const { error: pwError } = await supabase.auth.updateUser({ password });
-  if (pwError) {
+  const { data, error } = await supabaseAdmin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+
+  if (error) {
     redirect(
-      `/portal/register?step=password&patientId=${patientId}&error=${encodeURIComponent(
-        pwError.message ?? "Failed to set password.",
+      `/portal/register?step=email&patientId=${patientId}&error=${encodeURIComponent(
+        error.message ?? "Failed to create account. Try a different email.",
       )}`,
     );
   }
@@ -126,10 +82,10 @@ export async function setPortalPassword(formData: FormData) {
   await withRetry(() =>
     prisma.patient.update({
       where: { id: patientId },
-      data: { userId: userData.user.id },
+      data: { userId: data.user.id, email },
     }),
   );
 
   revalidatePath("/", "layout");
-  redirect("/portal");
+  redirect("/login?registered=1");
 }
