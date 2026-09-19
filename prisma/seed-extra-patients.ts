@@ -19,6 +19,7 @@ const PATIENTS = [
     address: "14 Rue Al Mansour, Rabat",
     appointments: [
       { daysFromNow: 2,  hour: 9,  notes: "First prenatal visit. Patient is 10 weeks pregnant." },
+      { daysFromNow: 7,  hour: 11, notes: "Blood pressure check — elevated at last visit." },
       { daysFromNow: 30, hour: 10, notes: "Second prenatal follow-up." },
     ],
   },
@@ -29,7 +30,7 @@ const PATIENTS = [
     phone: "0623456702",
     address: "7 Blvd Mohammed VI, Casablanca",
     appointments: [
-      { daysFromNow: 3,  hour: 11, notes: "Diabetic review. HbA1c check due." },
+      { daysFromNow: 3,  hour: 9,  notes: "Diabetic review. HbA1c check due." },
       { daysFromNow: 90, hour: 14, notes: "Quarterly diabetic check-up." },
     ],
   },
@@ -40,7 +41,8 @@ const PATIENTS = [
     phone: "0634567803",
     address: "22 Ave des FAR, Marrakech",
     appointments: [
-      { daysFromNow: 5, hour: 15, notes: "Chronic back pain follow-up. Physiotherapy referral pending." },
+      { daysFromNow: 3,  hour: 11, notes: "Chronic back pain follow-up. Physiotherapy referral pending." },
+      { daysFromNow: 17, hour: 14, notes: "Physiotherapy progress review." },
     ],
   },
   {
@@ -62,7 +64,7 @@ const PATIENTS = [
     phone: "0656789005",
     address: "9 Hay Riad, Rabat",
     appointments: [
-      { daysFromNow: 1,  hour: 16, notes: "Anxiety and stress management consultation." },
+      { daysFromNow: 2,  hour: 14, notes: "Anxiety and stress management consultation." },
       { daysFromNow: 14, hour: 16, notes: "Mental health follow-up." },
     ],
   },
@@ -73,7 +75,8 @@ const PATIENTS = [
     phone: "0667890106",
     address: "31 Quartier Palmier, Casablanca",
     appointments: [
-      { daysFromNow: 4,  hour: 8,  notes: "Hypertension medication adjustment. BP logged at 158/95 last visit." },
+      { daysFromNow: 2,  hour: 16, notes: "Hypertension medication adjustment. BP logged at 158/95 last visit." },
+      { daysFromNow: 30, hour: 9,  notes: "Blood pressure recheck after medication change." },
     ],
   },
   {
@@ -83,7 +86,8 @@ const PATIENTS = [
     phone: "0678901207",
     address: "5 Rue Ibnou Khatib, Agadir",
     appointments: [
-      { daysFromNow: 10, hour: 13, notes: "Routine annual check-up." },
+      { daysFromNow: 7,  hour: 13, notes: "Routine annual check-up." },
+      { daysFromNow: 7,  hour: 15, notes: "Gynaecology referral follow-up." },
     ],
   },
   {
@@ -93,8 +97,8 @@ const PATIENTS = [
     phone: "0689012308",
     address: "18 Rue de la Liberté, Tanger",
     appointments: [
-      { daysFromNow: 6,  hour: 10, notes: "Respiratory review — persistent cough 3 weeks." },
-      { daysFromNow: 20, hour: 11, notes: "Chest X-ray results review." },
+      { daysFromNow: 3,  hour: 14, notes: "Respiratory review — persistent cough 3 weeks." },
+      { daysFromNow: 17, hour: 11, notes: "Chest X-ray results review." },
     ],
   },
 ];
