@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentPatient } from "@/lib/portal-auth";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { portalSignOut } from "./actions";
 
 const NAV = [
@@ -48,10 +49,11 @@ export default async function PortalLayout({ children }: { children: React.React
           </nav>
 
           {/* User + sign out */}
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-2">
             <span className="text-sm text-muted-foreground hidden sm:block">
               {patient.name}
             </span>
+            <ThemeToggle />
             <form action={portalSignOut}>
               <Button type="submit" variant="outline" size="sm">
                 Sign out
