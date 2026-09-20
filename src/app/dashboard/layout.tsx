@@ -106,7 +106,7 @@ export default async function DashboardLayout({
             <ThemeToggle />
           </div>
         </header>
-        <main className="flex-1 p-4 md:p-6 print:p-0">{children}</main>
+        <main className="flex-1 p-4 pb-20 md:p-6 md:pb-24 print:p-0">{children}</main>
       </div>
       <ChatWidget currentProfileId={profile.id} />
     </div>

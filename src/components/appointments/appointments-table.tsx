@@ -46,6 +46,7 @@ export function AppointmentsTable({
   currentProfileId: string;
   currentRole: string;
 }) {
+  const [search, setSearch] = useState("");
   const [doctorId, setDoctorId] = useState(ALL_DOCTORS);
   const [date, setDate] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
@@ -54,7 +55,9 @@ export function AppointmentsTable({
   const doctorOptions = [{ id: ALL_DOCTORS, name: "All doctors" }, ...doctors.map((d) => ({ id: d.id, name: `Dr. ${d.name}` }))];
 
   const filtered = useMemo(() => {
+    const q = search.toLowerCase();
     return data
+      .filter((row) => !q || row.patientName.toLowerCase().includes(q))
       .filter((row) => doctorId === ALL_DOCTORS || row.doctorId === doctorId)
       .filter((row) => !date || row.scheduledAt.slice(0, 10) === date)
       .sort((a, b) =>
@@ -62,7 +65,7 @@ export function AppointmentsTable({
           ? a.scheduledAt.localeCompare(b.scheduledAt)
           : b.scheduledAt.localeCompare(a.scheduledAt),
       );
-  }, [data, doctorId, date, sortAsc]);
+  }, [data, search, doctorId, date, sortAsc]);
 
   const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
@@ -85,6 +88,12 @@ export function AppointmentsTable({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-end gap-3">
+        <Input
+          placeholder="Search patient..."
+          value={search}
+          onChange={(e) => { setSearch(e.target.value); resetPage(); }}
+          className="w-full sm:w-44"
+        />
         <div className="flex flex-col gap-1 w-full sm:w-auto">
           <label className="text-sm text-muted-foreground">Doctor</label>
           <OptionCombobox
@@ -104,11 +113,12 @@ export function AppointmentsTable({
             className="w-full sm:w-44"
           />
         </div>
-        {(doctorId !== ALL_DOCTORS || date) && (
+        {(search || doctorId !== ALL_DOCTORS || date) && (
           <button
             type="button"
             className="text-sm text-muted-foreground underline"
             onClick={() => {
+              setSearch("");
               setDoctorId(ALL_DOCTORS);
               setDate("");
             }}
