@@ -127,6 +127,11 @@ export function ChatThread({ currentProfileId, otherId, compact }: ChatThreadPro
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
+                  {fromMe && (
+                    <span className="ml-1">
+                      {msg.readAt ? " · Read" : " · Sent"}
+                    </span>
+                  )}
                 </p>
               </div>
             </div>
