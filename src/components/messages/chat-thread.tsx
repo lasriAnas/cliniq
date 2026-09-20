@@ -37,6 +37,7 @@ export function ChatThread({ currentProfileId, otherId, compact }: ChatThreadPro
   };
 
   useEffect(() => {
+    setMessages([]);
     load();
     markAsRead(otherId);
     const id = setInterval(load, 3000);
