@@ -29,6 +29,7 @@ export function DiagnosisDialog({
   const [open, setOpen] = useState(false);
   const [diagnosis, setDiagnosis] = useState(initialDiagnosis ?? "");
   const [advice, setAdvice] = useState<string | null>(null);
+  const [adviceError, setAdviceError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [isSaving, startSave] = useTransition();
   const [isGenerating, startGenerate] = useTransition();
@@ -41,9 +42,14 @@ export function DiagnosisDialog({
   }
 
   function handleGenerateAdvice() {
+    setAdviceError(null);
     startGenerate(async () => {
-      const result = await generatePatientAdvice(diagnosis);
-      setAdvice(result);
+      try {
+        const result = await generatePatientAdvice(diagnosis);
+        setAdvice(result);
+      } catch (err) {
+        setAdviceError(err instanceof Error ? err.message : "Failed to generate advice. Check that ANTHROPIC_API_KEY is configured.");
+      }
     });
   }
 
@@ -85,7 +91,7 @@ export function DiagnosisDialog({
           <div className="flex flex-col gap-3">
             <Textarea
               value={diagnosis}
-              onChange={(e) => { setDiagnosis(e.target.value); setAdvice(null); }}
+              onChange={(e) => { setDiagnosis(e.target.value); setAdvice(null); setAdviceError(null); }}
               placeholder="Enter diagnosis…"
               rows={3}
               disabled={busy}
@@ -115,6 +121,11 @@ export function DiagnosisDialog({
                 </Button>
               </div>
             </div>
+            {adviceError && (
+              <p className="text-sm text-destructive rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2">
+                {adviceError}
+              </p>
+            )}
             {advice && (
               <div className="flex flex-col gap-2 rounded-md border bg-muted/40 p-3">
                 <div className="flex items-center justify-between">

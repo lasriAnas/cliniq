@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { prisma } from "@/lib/prisma";
 import { appointmentSchema } from "@/lib/schemas/appointment";
 import { withRetry } from "@/lib/with-retry";
@@ -103,52 +103,19 @@ export async function updateAppointmentDiagnosis(id: string, diagnosis: string) 
 export async function generatePatientAdvice(diagnosis: string): Promise<string> {
   await requireRole(["ADMIN", "DOCTOR"]);
 
-  const client = new Anthropic();
-
-  const stream = client.messages.stream({
-    model: "claude-opus-4-8",
-    max_tokens: 1024,
-    thinking: { type: "adaptive" },
-    messages: [
-      {
-        role: "user",
-        content: buildPatientAdvicePrompt(diagnosis),
-      },
-    ],
-  });
-
-  const message = await stream.finalMessage();
-  const textBlock = message.content.find((b) => b.type === "text");
-  if (!textBlock || textBlock.type !== "text") {
-    throw new Error("No advice returned");
-  }
-  return textBlock.text;
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const result = await model.generateContent(buildPatientAdvicePrompt(diagnosis));
+  return result.response.text();
 }
 
 export async function summarizeAppointmentNotes(notes: string): Promise<string> {
   await requireRole(["ADMIN", "DOCTOR"]);
 
-  const client = new Anthropic();
-
-  const stream = client.messages.stream({
-    model: "claude-opus-4-8",
-    max_tokens: 1024,
-    thinking: { type: "adaptive" },
-    messages: [
-      {
-        role: "user",
-        content: `You are a clinical documentation assistant. Rewrite the following raw appointment notes into a structured SOAP format (Subjective, Objective, Assessment, Plan). Be concise, use professional medical language, and preserve all clinical details. If a section has no information, write "Not documented."
-
-Raw notes:
-${notes}`,
-      },
-    ],
-  });
-
-  const message = await stream.finalMessage();
-  const textBlock = message.content.find((b) => b.type === "text");
-  if (!textBlock || textBlock.type !== "text") {
-    throw new Error("No summary returned");
-  }
-  return textBlock.text;
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const result = await model.generateContent(
+    `You are a clinical documentation assistant. Rewrite the following raw appointment notes into a structured SOAP format (Subjective, Objective, Assessment, Plan). Be concise, use professional medical language, and preserve all clinical details. If a section has no information, write "Not documented."\n\nRaw notes:\n${notes}`
+  );
+  return result.response.text();
 }
