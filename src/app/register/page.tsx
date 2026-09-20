@@ -58,6 +58,14 @@ export default async function RegisterPage({
               </select>
             </div>
             <div className="flex flex-col gap-2">
+              <Label htmlFor="phone">Phone number</Label>
+              <Input id="phone" name="phone" type="tel" required autoComplete="tel" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="address">Address</Label>
+              <Input id="address" name="address" autoComplete="street-address" />
+            </div>
+            <div className="flex flex-col gap-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"

@@ -11,9 +11,11 @@ export async function register(formData: FormData) {
   const email = (formData.get("email") as string).trim();
   const dob = formData.get("dob") as string;
   const gender = formData.get("gender") as string;
+  const phone = (formData.get("phone") as string).trim();
+  const address = (formData.get("address") as string | null)?.trim() || null;
   const password = formData.get("password") as string;
 
-  if (!name || !email || !dob || !gender || !password) {
+  if (!name || !email || !dob || !gender || !phone || !password) {
     redirect(`/register?error=${encodeURIComponent("All fields are required.")}`);
   }
 
@@ -44,7 +46,8 @@ export async function register(formData: FormData) {
         email,
         dob: new Date(dob),
         gender: gender as "MALE" | "FEMALE",
-        phone: "",
+        phone,
+        address,
         userId: data.user.id,
       },
     }),
