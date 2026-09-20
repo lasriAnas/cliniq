@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import { formatTime } from "@/lib/format-date";
 import { fetchMessages, sendMessage, markAsRead, uploadAttachment, isImageAttachment } from "@/app/dashboard/messages/actions";
 import { findImageFile } from "@/lib/find-image-file";
 import { Button } from "@/components/ui/button";
@@ -123,10 +124,7 @@ export function ChatThread({ currentProfileId, otherId, compact }: ChatThreadPro
                 )}
                 {msg.body && <p>{msg.body}</p>}
                 <p className={`text-[10px] mt-0.5 opacity-60 ${fromMe ? "text-right" : ""}`}>
-                  {new Date(msg.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {formatTime(msg.createdAt)}
                   {fromMe && (
                     <span className="ml-1">
                       {msg.readAt ? " · Read" : " · Sent"}

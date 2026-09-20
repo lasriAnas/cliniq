@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { formatDateTime } from "@/lib/format-date";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -120,7 +121,7 @@ export function PatientDetailDialog({
                         <div>
                           <div className="font-medium">Dr. {appt.doctorName}</div>
                           <div className="text-sm text-muted-foreground">
-                            {new Date(appt.scheduledAt).toLocaleString()}
+                            {formatDateTime(appt.scheduledAt)}
                           </div>
                         </div>
                         <div className="flex items-center gap-1.5">

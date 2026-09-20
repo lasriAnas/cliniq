@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { formatDateTime } from "@/lib/format-date";
 import { PatientDetailDialog } from "@/components/patients/patient-detail-dialog";
 import { ReceiptDialog } from "@/components/billing/receipt-dialog";
 import { Button } from "@/components/ui/button";
@@ -67,9 +68,9 @@ export function BillingTable({ data }: { data: InvoiceRow[] }) {
     const rows = filtered.map((invoice) => ({
       Patient: invoice.patientName,
       Doctor: `Dr. ${invoice.doctorName}`,
-      "Appointment date": new Date(invoice.scheduledAt).toLocaleString(),
+      "Appointment date": formatDateTime(invoice.scheduledAt),
       "Amount (MAD)": invoice.amount,
-      "Created at": new Date(invoice.createdAt).toLocaleString(),
+      "Created at": formatDateTime(invoice.createdAt),
       Status: invoice.status,
     }));
     downloadCsv(
@@ -187,9 +188,9 @@ export function BillingTable({ data }: { data: InvoiceRow[] }) {
                     </PatientDetailDialog>
                   </TableCell>
                   <TableCell>Dr. {invoice.doctorName}</TableCell>
-                  <TableCell>{new Date(invoice.scheduledAt).toLocaleString()}</TableCell>
+                  <TableCell>{formatDateTime(invoice.scheduledAt)}</TableCell>
                   <TableCell>{invoice.amount}</TableCell>
-                  <TableCell>{new Date(invoice.createdAt).toLocaleString()}</TableCell>
+                  <TableCell>{formatDateTime(invoice.createdAt)}</TableCell>
                   <TableCell>
                     <InvoiceStatusSelect
                       invoiceId={invoice.id}

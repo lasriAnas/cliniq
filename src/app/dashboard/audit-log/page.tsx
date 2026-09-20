@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 import { getCurrentProfile } from "@/lib/auth";
+import { formatDateTime } from "@/lib/format-date";
 import { AuditLogFilters } from "@/components/audit-log/audit-log-filters";
 import { AuditLogPaginator } from "@/components/audit-log/audit-log-paginator";
 import {
@@ -85,7 +86,7 @@ export default async function AuditLogPage({
               logs.map((log) => (
                 <TableRow key={log.id}>
                   <TableCell className="whitespace-nowrap">
-                    {log.createdAt.toLocaleString()}
+                    {formatDateTime(log.createdAt)}
                   </TableCell>
                   <TableCell>{log.actorName}</TableCell>
                   <TableCell>

@@ -1,6 +1,7 @@
 import { getCurrentPatient } from "@/lib/portal-auth";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
+import { formatDate } from "@/lib/format-date";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -61,20 +62,8 @@ export default async function PortalInvoicesPage() {
                 <div>
                   <p className="text-sm font-medium">Dr. {inv.appointment.doctor.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(inv.appointment.scheduledAt).toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                    {inv.paidAt && (
-                      <>
-                        {" "}· Paid{" "}
-                        {new Date(inv.paidAt).toLocaleDateString("en-GB", {
-                          day: "numeric",
-                          month: "short",
-                        })}
-                      </>
-                    )}
+                    {formatDate(inv.appointment.scheduledAt)}
+                    {inv.paidAt && <> · Paid {formatDate(inv.paidAt)}</>}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatDateTime } from "@/lib/format-date";
 import {
   Dialog,
   DialogContent,
@@ -57,11 +58,11 @@ export function ReceiptDialog({ receipt }: { receipt: ReceiptData }) {
               </div>
               <div className="flex justify-between">
                 <dt className="text-muted-foreground">Appointment date</dt>
-                <dd>{new Date(receipt.scheduledAt).toLocaleString()}</dd>
+                <dd>{formatDateTime(receipt.scheduledAt)}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-muted-foreground">Paid on</dt>
-                <dd>{receipt.paidAt ? new Date(receipt.paidAt).toLocaleString() : "—"}</dd>
+                <dd>{receipt.paidAt ? formatDateTime(receipt.paidAt) : "—"}</dd>
               </div>
               <div className="mt-2 flex justify-between border-t pt-3 text-base font-semibold">
                 <dt>Amount paid</dt>

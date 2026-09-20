@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getCurrentPatient } from "@/lib/portal-auth";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
+import { formatDate, formatTime } from "@/lib/format-date";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, FileText, Receipt } from "lucide-react";
@@ -108,16 +109,7 @@ export default async function PortalHomePage() {
                   <div>
                     <p className="font-medium text-sm">Dr. {appt.doctor.name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(appt.scheduledAt).toLocaleDateString("en-GB", {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                      })}{" "}
-                      at{" "}
-                      {new Date(appt.scheduledAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {formatDate(appt.scheduledAt)} at {formatTime(appt.scheduledAt)}
                     </p>
                   </div>
                   <Badge variant={STATUS_VARIANT[appt.status] ?? "outline"}>{appt.status}</Badge>
@@ -143,7 +135,7 @@ export default async function PortalHomePage() {
                 <CardContent className="py-3">
                   <p className="text-sm font-medium">Dr. {rx.appointment.doctor.name}</p>
                   <p className="text-xs text-muted-foreground mb-2">
-                    {new Date(rx.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                    {formatDate(rx.createdAt)}
                   </p>
                   <ul className="flex flex-col gap-0.5">
                     {rx.items.map((item) => (

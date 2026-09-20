@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { prisma } from "@/lib/prisma";
+import { formatDateTime } from "@/lib/format-date";
 import { appointmentSchema } from "@/lib/schemas/appointment";
 import { withRetry } from "@/lib/with-retry";
 import { requireRole } from "@/lib/auth";
@@ -41,10 +42,7 @@ export async function createAppointment(formData: FormData) {
     ),
   ]);
 
-  const scheduledDate = new Date(parsed.data.scheduledAt).toLocaleString("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
+  const scheduledDate = formatDateTime(parsed.data.scheduledAt);
 
   await createNotification({
     profileId: parsed.data.doctorId,

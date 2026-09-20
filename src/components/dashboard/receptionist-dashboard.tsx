@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatTime } from "@/lib/format-date";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -143,7 +144,7 @@ export function ReceptionistDashboard({
               {sorted.map((appt) => (
                 <div key={appt.id} className="py-3 flex items-center gap-3">
                   <span className="w-14 shrink-0 text-sm tabular-nums text-muted-foreground">
-                    {appt.scheduledAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    {formatTime(appt.scheduledAt)}
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{appt.patientName}</p>

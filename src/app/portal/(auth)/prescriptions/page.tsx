@@ -1,6 +1,7 @@
 import { getCurrentPatient } from "@/lib/portal-auth";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
+import { formatDate } from "@/lib/format-date";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function PortalPrescriptionsPage() {
@@ -41,11 +42,7 @@ export default async function PortalPrescriptionsPage() {
                   Prescription from Dr. {rx.appointment.doctor.name}
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  {new Date(rx.createdAt).toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  {formatDate(rx.createdAt)}
                 </p>
               </CardHeader>
               <CardContent>

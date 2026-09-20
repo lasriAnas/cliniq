@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 import { getCurrentProfile } from "@/lib/auth";
+import { formatDateTime } from "@/lib/format-date";
 import { BillingTable, type InvoiceRow } from "@/components/billing/billing-table";
 import { InvoiceCreateDialog } from "@/components/billing/invoice-create-dialog";
 
@@ -40,7 +41,7 @@ export default async function BillingPage() {
 
   const appointmentOptions = uninvoicedAppointments.map((appt) => ({
     id: appt.id,
-    name: `${appt.patient.name} — Dr. ${appt.doctor.name} — ${appt.scheduledAt.toLocaleString()}`,
+    name: `${appt.patient.name} — Dr. ${appt.doctor.name} — ${formatDateTime(appt.scheduledAt)}`,
   }));
 
   return (

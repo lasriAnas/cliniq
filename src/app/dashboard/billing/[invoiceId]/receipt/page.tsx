@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 import { getCurrentProfile } from "@/lib/auth";
+import { formatDateTime } from "@/lib/format-date";
 import { PrintButton } from "@/components/print-button";
 
 export default async function ReceiptPage({
@@ -52,11 +53,11 @@ export default async function ReceiptPage({
           </div>
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Appointment date</dt>
-            <dd>{invoice.appointment.scheduledAt.toLocaleString()}</dd>
+            <dd>{formatDateTime(invoice.appointment.scheduledAt)}</dd>
           </div>
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Paid on</dt>
-            <dd>{invoice.paidAt ? invoice.paidAt.toLocaleString() : "—"}</dd>
+            <dd>{invoice.paidAt ? formatDateTime(invoice.paidAt) : "—"}</dd>
           </div>
           <div className="mt-2 flex justify-between border-t pt-3 text-base font-semibold">
             <dt>Amount paid</dt>

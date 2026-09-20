@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { formatDateTime } from "@/lib/format-date";
 import { withRetry } from "@/lib/with-retry";
 import { requirePatient } from "@/lib/portal-auth";
 import { createNotification } from "@/app/dashboard/notifications/actions";
@@ -33,10 +34,7 @@ export async function portalBookAppointment(formData: FormData) {
     }),
   );
 
-  const formattedDate = scheduledDate.toLocaleString("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
+  const formattedDate = formatDateTime(scheduledDate);
 
   await createNotification({
     profileId: doctorId,

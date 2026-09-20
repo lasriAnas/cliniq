@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatTime } from "@/lib/format-date";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -53,7 +54,7 @@ export function DoctorDashboard({
             {nextAppointment.patientName}
           </p>
           <p className="text-sm text-blue-700 dark:text-blue-300 mt-0.5">
-            {nextAppointment.scheduledAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            {formatTime(nextAppointment.scheduledAt)}
           </p>
         </div>
       ) : (
@@ -120,7 +121,7 @@ export function DoctorDashboard({
               {todayAppointments.map((appt) => (
                 <div key={appt.id} className="py-3 flex items-center gap-3">
                   <span className="w-14 shrink-0 text-sm tabular-nums text-muted-foreground">
-                    {appt.scheduledAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    {formatTime(appt.scheduledAt)}
                   </span>
                   <span className="flex-1 text-sm font-medium">{appt.patientName}</span>
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[appt.status] ?? ""}`}>

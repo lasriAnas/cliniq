@@ -77,31 +77,31 @@ async function main() {
   const pastAppointments = [
     {
       scheduledAt: new Date("2026-07-10T09:00:00"),
-      notes: "Routine check-up. Patient reports mild fatigue.",
+      notes: "Patient says he has been feeling exhausted for the past three weeks, even after a full night of sleep. He also mentioned his heart feels like it is racing when he climbs stairs and he gets out of breath faster than usual. He has not changed his diet or lifestyle recently. No chest pain.",
       diagnosis: "Iron deficiency anaemia",
       invoice: { amount: 350, status: "PAID" as const, paidAt: new Date("2026-07-10") },
       prescription: [
-        { medicationName: "Ferrous Sulfate", dosage: "200 mg once daily", duration: "3 months", notes: "Take with food" as string | undefined },
-        { medicationName: "Vitamin C", dosage: "500 mg once daily", duration: "3 months", notes: undefined },
+        { medicationName: "Ferrous Sulfate", dosage: "200 mg once daily", duration: "3 months", notes: "Take with food to reduce stomach upset" as string | undefined },
+        { medicationName: "Vitamin C", dosage: "500 mg once daily", duration: "3 months", notes: "Take alongside iron to improve absorption" as string | undefined },
       ],
     },
     {
       scheduledAt: new Date("2026-08-05T11:00:00"),
-      notes: "Follow-up. Energy levels improved. Blood pressure slightly elevated.",
+      notes: "Patient reports his energy has improved since starting iron supplements but he has been getting headaches almost every afternoon, usually at the back of his head. He checks his blood pressure at the pharmacy and it reads around 150 over 95. He feels stressed at work and has been sleeping poorly. No dizziness or vision changes.",
       diagnosis: "Stage 1 hypertension",
       invoice: { amount: 280, status: "PAID" as const, paidAt: new Date("2026-08-05") },
       prescription: [
-        { medicationName: "Amlodipine", dosage: "5 mg once daily", duration: "Ongoing", notes: "Monitor BP weekly" as string | undefined },
+        { medicationName: "Amlodipine", dosage: "5 mg once daily", duration: "Ongoing", notes: "Monitor blood pressure weekly and log readings" as string | undefined },
       ],
     },
     {
       scheduledAt: new Date("2026-09-01T14:30:00"),
-      notes: "Seasonal allergy flare-up. Sneezing, itchy eyes.",
+      notes: "Patient complains of persistent sneezing for the past ten days, especially in the morning. His eyes are itchy and watery, and his nose is blocked at night which is disrupting his sleep. He says it started after he spent time outdoors near the construction site near his home. No fever. He tried an over-the-counter antihistamine once but it made him very drowsy.",
       diagnosis: "Allergic rhinitis",
       invoice: { amount: 200, status: "UNPAID" as const, paidAt: null },
       prescription: [
-        { medicationName: "Cetirizine", dosage: "10 mg once daily", duration: "2 weeks", notes: undefined },
-        { medicationName: "Fluticasone nasal spray", dosage: "2 sprays per nostril daily", duration: "2 weeks", notes: undefined },
+        { medicationName: "Cetirizine", dosage: "10 mg once daily", duration: "2 weeks", notes: "Take in the evening to minimise drowsiness" as string | undefined },
+        { medicationName: "Fluticasone nasal spray", dosage: "2 sprays per nostril once daily", duration: "2 weeks", notes: "Use each morning before going outside" as string | undefined },
       ],
     },
   ];
@@ -149,7 +149,7 @@ async function main() {
       doctorId: doctor.id,
       scheduledAt: new Date("2026-10-14T10:00:00"),
       status: "SCHEDULED",
-      notes: "Hypertension follow-up and routine blood work review.",
+      notes: "Patient would like to review his blood pressure readings over the past month. He says the headaches are less frequent but still present. He is also asking about whether he needs to continue the iron supplements or whether blood work should be repeated.",
     },
   });
 

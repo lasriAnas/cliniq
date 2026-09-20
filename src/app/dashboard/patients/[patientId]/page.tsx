@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 import { getCurrentProfile } from "@/lib/auth";
+import { formatDate, formatDateTime } from "@/lib/format-date";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PrintButton } from "@/components/print-button";
@@ -74,7 +75,7 @@ export default async function PatientProfilePage({
         <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
           <div>
             <div className="text-muted-foreground">Date of birth</div>
-            <div>{patient.dob.toISOString().slice(0, 10)}</div>
+            <div>{formatDate(patient.dob)}</div>
           </div>
           <div>
             <div className="text-muted-foreground">Gender</div>
@@ -138,16 +139,12 @@ export default async function PatientProfilePage({
                   <div>
                     <div className="font-medium">Dr. {appt.doctor.name}</div>
                     <div className="text-sm text-muted-foreground">
-                      {appt.scheduledAt.toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
+                      {formatDate(appt.scheduledAt)}
                     </div>
                   </div>
                   <div className="text-right text-xs text-muted-foreground">
                     <div>Patient: {patient.name}</div>
-                    <div>DOB: {patient.dob.toISOString().slice(0, 10)}</div>
+                    <div>DOB: {formatDate(patient.dob)}</div>
                   </div>
                 </div>
 
@@ -200,7 +197,7 @@ function AppointmentRow({ appt }: { appt: Appt }) {
     <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
       <div>
         <div className="font-medium">Dr. {appt.doctor.name}</div>
-        <div className="text-muted-foreground">{appt.scheduledAt.toLocaleString()}</div>
+        <div className="text-muted-foreground">{formatDateTime(appt.scheduledAt)}</div>
       </div>
       <div className="flex items-center gap-2">
         {appt.prescription && appt.prescription.items.length > 0 && (

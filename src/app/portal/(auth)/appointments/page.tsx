@@ -1,6 +1,7 @@
 import { getCurrentPatient } from "@/lib/portal-auth";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
+import { formatDate, formatTime } from "@/lib/format-date";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -112,17 +113,7 @@ function AppointmentCard({
           <div>
             <p className="font-medium text-sm">Dr. {appt.doctor.name}</p>
             <p className="text-xs text-muted-foreground">
-              {new Date(appt.scheduledAt).toLocaleDateString("en-GB", {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}{" "}
-              at{" "}
-              {new Date(appt.scheduledAt).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {formatDate(appt.scheduledAt)} at {formatTime(appt.scheduledAt)}
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
