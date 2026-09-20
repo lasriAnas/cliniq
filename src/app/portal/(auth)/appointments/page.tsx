@@ -2,9 +2,11 @@ import { getCurrentPatient } from "@/lib/portal-auth";
 import { prisma } from "@/lib/prisma";
 import { withRetry } from "@/lib/with-retry";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { PortalBookingForm } from "@/components/portal/portal-booking-form";
+import { cancelAppointment } from "../actions";
 
 const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   SCHEDULED: "default",
@@ -65,7 +67,7 @@ export default async function PortalAppointmentsPage() {
           <h2 className="font-medium">Upcoming</h2>
           <div className="flex flex-col gap-2">
             {upcoming.map((appt) => (
-              <AppointmentCard key={appt.id} appt={appt} />
+              <AppointmentCard key={appt.id} appt={appt} showCancel />
             ))}
           </div>
         </div>
@@ -90,6 +92,7 @@ export default async function PortalAppointmentsPage() {
 
 function AppointmentCard({
   appt,
+  showCancel,
 }: {
   appt: {
     id: string;
@@ -100,6 +103,7 @@ function AppointmentCard({
     doctor: { name: string };
     prescription: { items: { id: string; medicationName: string; dosage: string; duration: string; notes: string | null }[] } | null;
   };
+  showCancel?: boolean;
 }) {
   return (
     <Card>
@@ -121,7 +125,16 @@ function AppointmentCard({
               })}
             </p>
           </div>
-          <Badge variant={STATUS_VARIANT[appt.status] ?? "outline"}>{appt.status}</Badge>
+          <div className="flex items-center gap-2 shrink-0">
+            <Badge variant={STATUS_VARIANT[appt.status] ?? "outline"}>{appt.status}</Badge>
+            {showCancel && (
+              <form action={cancelAppointment.bind(null, appt.id)}>
+                <Button type="submit" variant="outline" size="sm" className="text-destructive hover:text-destructive">
+                  Cancel
+                </Button>
+              </form>
+            )}
+          </div>
         </div>
 
         {appt.diagnosis && (
