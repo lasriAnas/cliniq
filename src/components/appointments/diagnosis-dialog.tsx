@@ -44,12 +44,9 @@ export function DiagnosisDialog({
   function handleGenerateAdvice() {
     setAdviceError(null);
     startGenerate(async () => {
-      try {
-        const result = await generatePatientAdvice(diagnosis);
-        setAdvice(result);
-      } catch (err) {
-        setAdviceError(err instanceof Error ? err.message : "Failed to generate advice. Check that ANTHROPIC_API_KEY is configured.");
-      }
+      const { advice, error } = await generatePatientAdvice(diagnosis);
+      if (error) setAdviceError(error);
+      else setAdvice(advice ?? "");
     });
   }
 

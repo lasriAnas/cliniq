@@ -36,10 +36,14 @@ export function AppointmentNotesDialog({
     });
   }
 
+  const [summarizeError, setSummarizeError] = useState<string | null>(null);
+
   function handleSummarize() {
+    setSummarizeError(null);
     startSummarize(async () => {
-      const summary = await summarizeAppointmentNotes(notes);
-      setNotes(summary);
+      const { summary, error } = await summarizeAppointmentNotes(notes);
+      if (error) setSummarizeError(error);
+      else setNotes(summary ?? notes);
     });
   }
 
@@ -93,6 +97,11 @@ export function AppointmentNotesDialog({
                 </Button>
               </div>
             </div>
+            {summarizeError && (
+              <p className="text-sm text-destructive rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2">
+                {summarizeError}
+              </p>
+            )}
           </div>
         ) : (
           <p className="text-sm text-muted-foreground whitespace-pre-wrap">

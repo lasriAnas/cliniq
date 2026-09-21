@@ -98,22 +98,32 @@ export async function updateAppointmentDiagnosis(id: string, diagnosis: string) 
   revalidatePath("/dashboard/appointments");
 }
 
-export async function generatePatientAdvice(diagnosis: string): Promise<string> {
+export async function generatePatientAdvice(diagnosis: string): Promise<{ advice?: string; error?: string }> {
   await requireRole(["ADMIN", "DOCTOR"]);
 
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-  const result = await model.generateContent(buildPatientAdvicePrompt(diagnosis));
-  return result.response.text();
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await model.generateContent(buildPatientAdvicePrompt(diagnosis));
+    return { advice: result.response.text() };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Unknown error";
+    return { error: `AI generation failed: ${msg}` };
+  }
 }
 
-export async function summarizeAppointmentNotes(notes: string): Promise<string> {
+export async function summarizeAppointmentNotes(notes: string): Promise<{ summary?: string; error?: string }> {
   await requireRole(["ADMIN", "DOCTOR"]);
 
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-  const result = await model.generateContent(
-    `You are a clinical documentation assistant. Rewrite the following raw appointment notes into a structured SOAP format (Subjective, Objective, Assessment, Plan). Be concise, use professional medical language, and preserve all clinical details. If a section has no information, write "Not documented."\n\nRaw notes:\n${notes}`
-  );
-  return result.response.text();
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await model.generateContent(
+      `You are a clinical documentation assistant. Rewrite the following raw appointment notes into a structured SOAP format (Subjective, Objective, Assessment, Plan). Be concise, use professional medical language, and preserve all clinical details. If a section has no information, write "Not documented."\n\nRaw notes:\n${notes}`
+    );
+    return { summary: result.response.text() };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Unknown error";
+    return { error: `AI generation failed: ${msg}` };
+  }
 }
