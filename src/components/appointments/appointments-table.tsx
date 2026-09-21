@@ -49,6 +49,7 @@ export function AppointmentsTable({
   const [search, setSearch] = useState("");
   const [doctorId, setDoctorId] = useState(ALL_DOCTORS);
   const [date, setDate] = useState("");
+  const [dateKey, setDateKey] = useState(0);
   const [sortAsc, setSortAsc] = useState(true);
   const [page, setPage] = useState(0);
 
@@ -107,7 +108,9 @@ export function AppointmentsTable({
         <div className="flex flex-col gap-1 w-full sm:w-auto">
           <label className="text-sm text-muted-foreground">Date</label>
           <input
-            type="date" value={date}
+            key={dateKey}
+            type="date"
+            defaultValue=""
             onChange={(e) => { setDate(e.target.value); resetPage(); }}
             className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           />
@@ -120,6 +123,7 @@ export function AppointmentsTable({
               setSearch("");
               setDoctorId(ALL_DOCTORS);
               setDate("");
+              setDateKey((k) => k + 1);
             }}
           >
             Clear filters

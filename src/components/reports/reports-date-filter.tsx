@@ -26,7 +26,9 @@ export function ReportsDateFilter({ from, to }: { from: string; to: string }) {
       <div className="flex flex-col gap-1">
         <label className="text-sm text-muted-foreground">From</label>
         <input
-          type="date" value={from}
+          key={from}
+          type="date"
+          defaultValue={from}
           onChange={(e) => update("from", e.target.value)}
           className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
@@ -34,7 +36,9 @@ export function ReportsDateFilter({ from, to }: { from: string; to: string }) {
       <div className="flex flex-col gap-1">
         <label className="text-sm text-muted-foreground">To</label>
         <input
-          type="date" value={to}
+          key={to}
+          type="date"
+          defaultValue={to}
           onChange={(e) => update("to", e.target.value)}
           className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
