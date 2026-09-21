@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { DateInput } from "@/components/ui/date-input";
 import { Button } from "@/components/ui/button";
 import { OptionCombobox } from "@/components/option-combobox";
 import { AppointmentStatusSelect } from "@/components/appointments/appointment-status-select";
@@ -106,11 +107,9 @@ export function AppointmentsTable({
         </div>
         <div className="flex flex-col gap-1 w-full sm:w-auto">
           <label className="text-sm text-muted-foreground">Date</label>
-          <Input
-            type="date"
+          <DateInput
             value={date}
-            onChange={(e) => { setDate(e.target.value); resetPage(); }}
-            className="w-full sm:w-44"
+            onChange={(v) => { setDate(v); resetPage(); }}
           />
         </div>
         {(search || doctorId !== ALL_DOCTORS || date) && (

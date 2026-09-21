@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { DateTimeInput } from "@/components/ui/datetime-input";
 import { OptionCombobox } from "@/components/option-combobox";
 import { portalBookAppointment } from "@/app/portal/(auth)/appointments/actions";
 import { useState } from "react";
@@ -49,13 +50,7 @@ export function PortalBookingForm({ doctors }: { doctors: { id: string; name: st
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="scheduledAt">Date &amp; time</Label>
-        <Input
-          id="scheduledAt"
-          name="scheduledAt"
-          type="datetime-local"
-          required
-          className="w-52"
-        />
+        <DateTimeInput name="scheduledAt" required />
       </div>
       <Button type="submit" disabled={isPending || !doctorId}>
         {isPending ? "Booking…" : "Book appointment"}

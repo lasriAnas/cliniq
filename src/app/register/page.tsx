@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { DateInput } from "@/components/ui/date-input";
 import {
   Card,
   CardContent,
@@ -42,7 +43,7 @@ export default async function RegisterPage({
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="dob">Date of birth</Label>
-              <Input id="dob" name="dob" type="date" required />
+              <DateInput name="dob" required />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="gender">Gender</Label>
