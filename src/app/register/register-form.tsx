@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +35,6 @@ type Errors = Record<string, string>;
 export function RegisterForm({ serverError }: { serverError?: string }) {
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [isPending, startTransition] = useTransition();
 
   function blur(name: string, value: string) {
     setTouched((t) => ({ ...t, [name]: true }));
@@ -60,11 +59,8 @@ export function RegisterForm({ serverError }: { serverError?: string }) {
 
     if (hasError) {
       e.preventDefault();
-      return;
     }
-
-    e.preventDefault();
-    startTransition(() => form.submit());
+    // if valid, don't preventDefault — the server action fires normally
   }
 
   return (
@@ -155,9 +151,7 @@ export function RegisterForm({ serverError }: { serverError?: string }) {
 
       {serverError && <p className="text-sm text-destructive">{serverError}</p>}
 
-      <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? "Creating account…" : "Create account"}
-      </Button>
+      <Button type="submit" className="w-full">Create account</Button>
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,6 @@ export function LoginForm({
 }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [isPending, startTransition] = useTransition();
 
   function blur(name: string, value: string) {
     setTouched((t) => ({ ...t, [name]: true }));
@@ -29,8 +28,7 @@ export function LoginForm({
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    const form = e.currentTarget;
-    const data = new FormData(form);
+    const data = new FormData(e.currentTarget);
     const email = (data.get("email") as string) ?? "";
     const password = (data.get("password") as string) ?? "";
 
@@ -43,11 +41,8 @@ export function LoginForm({
 
     if (newErrors.email || newErrors.password) {
       e.preventDefault();
-      return;
     }
-
-    e.preventDefault();
-    startTransition(() => form.submit());
+    // if valid, don't preventDefault — the server action fires normally
   }
 
   return (
@@ -75,9 +70,7 @@ export function LoginForm({
         <p className="text-sm text-emerald-600">Account created! Sign in with your new credentials.</p>
       )}
       {serverError && <p className="text-sm text-destructive">{serverError}</p>}
-      <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? "Signing in…" : "Sign in"}
-      </Button>
+      <Button type="submit" className="w-full">Sign in</Button>
       <p className="text-center text-sm text-muted-foreground">
         New patient?{" "}
         <Link href="/register" className="underline hover:text-foreground">Create an account</Link>
