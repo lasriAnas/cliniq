@@ -103,7 +103,7 @@ export async function generatePatientAdvice(diagnosis: string): Promise<{ advice
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
     const result = await model.generateContent(buildPatientAdvicePrompt(diagnosis));
     return { advice: result.response.text() };
   } catch (err) {
@@ -117,7 +117,7 @@ export async function summarizeAppointmentNotes(notes: string): Promise<{ summar
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
     const result = await model.generateContent(
       `You are a clinical documentation assistant. Rewrite the following raw appointment notes into a structured SOAP format (Subjective, Objective, Assessment, Plan). Be concise, use professional medical language, and preserve all clinical details. If a section has no information, write "Not documented."\n\nRaw notes:\n${notes}`
     );
