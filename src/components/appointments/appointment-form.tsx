@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { appointmentSchema, type AppointmentFormValues } from "@/lib/schemas/appointment";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { DateTimeInput } from "@/components/ui/datetime-input";
 import { OptionCombobox } from "@/components/option-combobox";
 import {
   Form,
@@ -106,7 +105,7 @@ export function AppointmentForm({
             <FormItem>
               <FormLabel>Date and time</FormLabel>
               <FormControl>
-                <DateTimeInput {...field} />
+                <input type="datetime-local" {...field} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
               </FormControl>
               <FormMessage />
             </FormItem>

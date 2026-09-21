@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { patientSchema, type PatientFormValues } from "@/lib/schemas/patient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DateInput } from "@/components/ui/date-input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -74,7 +73,7 @@ export function PatientForm({
             <FormItem>
               <FormLabel>Date of birth</FormLabel>
               <FormControl>
-                <DateInput {...field} />
+                <input type="date" {...field} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
               </FormControl>
               <FormMessage />
             </FormItem>
