@@ -1,7 +1,3 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -9,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { login } from "./actions";
+import { LoginForm } from "./login-form";
 
 export default async function LoginPage({
   searchParams,
@@ -29,37 +25,7 @@ export default async function LoginPage({
           <CardDescription>Enter your email and password to continue.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={login} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" required autoComplete="email" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                required
-                autoComplete="current-password"
-              />
-            </div>
-            {registered && (
-              <p className="text-sm text-emerald-600">
-                Account created! Sign in with your new credentials.
-              </p>
-            )}
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full">
-              Sign in
-            </Button>
-          </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            New patient?{" "}
-            <Link href="/register" className="underline hover:text-foreground">
-              Create an account
-            </Link>
-          </p>
+          <LoginForm serverError={error} registered={registered} />
         </CardContent>
       </Card>
     </div>

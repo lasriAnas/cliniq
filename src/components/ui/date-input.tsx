@@ -7,6 +7,7 @@ type DateInputProps = {
   value?: string;        // YYYY-MM-DD
   defaultValue?: string; // YYYY-MM-DD
   onChange?: (value: string) => void;
+  onBlur?: () => void;
   required?: boolean;
   className?: string;
   disabled?: boolean;
@@ -46,7 +47,7 @@ const FIELD_CLS =
 const ERROR_CLS = "border-destructive";
 
 export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
-  ({ name, value, defaultValue, onChange, required, className, disabled }, ref) => {
+  ({ name, value, defaultValue, onChange, onBlur, required, className, disabled }, ref) => {
     const initial = parse(value ?? defaultValue ?? "");
     const [d, setD] = useState(initial.d);
     const [m, setM] = useState(initial.m);
@@ -99,6 +100,7 @@ export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
       const nd = pd, nm = pm, ny = y;
       notify(nd, nm, ny);
       validate(nd, nm, ny);
+      onBlur?.();
     }
 
     const assembled = assemble(d, m, y);
