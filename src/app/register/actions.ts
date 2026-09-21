@@ -23,6 +23,10 @@ export async function register(formData: FormData) {
     redirect(`/register?error=${encodeURIComponent("Invalid gender value.")}`);
   }
 
+  if (!/^(?:(?:\+212|00212)[- ]?|0)[5-7]\d{8}$/.test(phone)) {
+    redirect(`/register?error=${encodeURIComponent("Enter a valid Moroccan number (e.g. 0612345678 or +212612345678).")}`);
+  }
+
   // If a Supabase auth user exists for this email but has no patient record
   // (e.g. the patient was deleted from the dashboard), clean it up first.
   const existingPatient = await prisma.patient.findFirst({ where: { email } });
