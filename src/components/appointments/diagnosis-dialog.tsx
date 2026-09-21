@@ -139,7 +139,7 @@ export function DiagnosisDialog({
                     {copied ? "Copied" : "Copy"}
                   </Button>
                 </div>
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">{advice}</p>
+                <p className="text-sm whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto">{advice}</p>
               </div>
             )}
           </div>
