@@ -6,6 +6,7 @@ import { patientSchema } from "@/lib/schemas/patient";
 import { withRetry } from "@/lib/with-retry";
 import { requireRole } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function createPatient(formData: FormData) {
   await requireRole(["ADMIN", "RECEPTIONIST"]);
@@ -94,6 +95,12 @@ export async function deletePatient(id: string) {
   const actor = await requireRole(["ADMIN"]);
 
   const patient = await withRetry(() => prisma.patient.delete({ where: { id } }));
+
+  // Also remove the Supabase auth user so the email can be reused
+  if (patient.userId) {
+    await supabaseAdmin.auth.admin.deleteUser(patient.userId);
+  }
+
   await logAudit({
     actor,
     action: "PATIENT_DELETED",

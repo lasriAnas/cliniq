@@ -23,6 +23,17 @@ export async function register(formData: FormData) {
     redirect(`/register?error=${encodeURIComponent("Invalid gender value.")}`);
   }
 
+  // If a Supabase auth user exists for this email but has no patient record
+  // (e.g. the patient was deleted from the dashboard), clean it up first.
+  const existingPatient = await prisma.patient.findFirst({ where: { email } });
+  if (!existingPatient) {
+    const { data: listData } = await supabaseAdmin.auth.admin.listUsers();
+    const orphan = listData?.users.find((u) => u.email === email);
+    if (orphan) {
+      await supabaseAdmin.auth.admin.deleteUser(orphan.id);
+    }
+  }
+
   const { data, error } = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
