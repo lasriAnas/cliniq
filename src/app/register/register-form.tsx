@@ -135,6 +135,13 @@ export function RegisterForm({ serverError }: { serverError?: string }) {
         <Label htmlFor="phone">Phone number</Label>
         <Input
           id="phone" name="phone" type="tel" required autoComplete="tel"
+          onChange={(e) => {
+            // strip anything that isn't a digit, +, -, or space
+            const filtered = e.target.value.replace(/[^\d+\- ]/g, "");
+            e.target.value = filtered;
+            setErrors((err) => ({ ...err, phone: validateField("phone", filtered) }));
+            setTouched((t) => ({ ...t, phone: true }));
+          }}
           onBlur={(e) => blur("phone", e.target.value)}
           className={touched.phone && errors.phone ? "border-destructive" : ""}
         />
