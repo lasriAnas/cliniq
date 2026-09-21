@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { DateInput } from "@/components/ui/date-input";
 import { register } from "./actions";
 
 const PHONE_RE = /^(?:(?:\+212|00212)[- ]?|0)[5-7]\d{8}$/;
@@ -36,7 +35,6 @@ type Errors = Record<string, string>;
 export function RegisterForm({ serverError }: { serverError?: string }) {
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [dob, setDob] = useState("");
   const [isPending, startTransition] = useTransition();
 
   function blur(name: string, value: string) {
@@ -48,7 +46,7 @@ export function RegisterForm({ serverError }: { serverError?: string }) {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    const fields = ["name", "email", "gender", "phone", "password"];
+    const fields = ["name", "email", "dob", "gender", "phone", "password"];
     const newErrors: Errors = {};
     let hasError = false;
 
@@ -57,12 +55,8 @@ export function RegisterForm({ serverError }: { serverError?: string }) {
       if (err) { newErrors[f] = err; hasError = true; }
     }
 
-    // dob comes from state (hidden input assembled by DateInput)
-    const dobErr = validateField("dob", dob);
-    if (dobErr) { newErrors.dob = dobErr; hasError = true; }
-
     setErrors(newErrors);
-    setTouched(Object.fromEntries([...fields, "dob"].map((f) => [f, true])));
+    setTouched(Object.fromEntries(fields.map((f) => [f, true])));
 
     if (hasError) {
       e.preventDefault();
@@ -99,18 +93,11 @@ export function RegisterForm({ serverError }: { serverError?: string }) {
 
       {/* Date of birth */}
       <div className="flex flex-col gap-1.5">
-        <Label>Date of birth</Label>
-        <DateInput
-          name="dob"
-          required
-          onChange={(v) => {
-            setDob(v);
-            if (touched.dob) setErrors((e) => ({ ...e, dob: validateField("dob", v) }));
-          }}
-          onBlur={() => {
-            setTouched((t) => ({ ...t, dob: true }));
-            setErrors((e) => ({ ...e, dob: validateField("dob", dob) }));
-          }}
+        <Label htmlFor="dob">Date of birth</Label>
+        <input
+          id="dob" name="dob" type="date" required
+          onBlur={(e) => blur("dob", e.target.value)}
+          className={`flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${touched.dob && errors.dob ? "border-destructive" : "border-input"}`}
         />
         {touched.dob && errors.dob && <p className="text-xs text-destructive">{errors.dob}</p>}
       </div>
